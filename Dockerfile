@@ -1,4 +1,4 @@
-FROM rails
+FROM ruby:2.3
 
 ENV DISCOURSE_VERSION 1.8.9
 ENV HOMEDIR /var/www/discourse
@@ -9,11 +9,11 @@ RUN curl --silent --location https://deb.nodesource.com/setup_4.x | bash -
 # Install dependencies
 RUN apt-get install -yqq --no-install-recommends \
     libxml2 \
-    nodejs \
     wget \
     runit \
     lsof \
     vim \
+    nodejs mysql-client postgresql-client sqlite3 \
     && npm install uglify-js@2.8.27 -g \
     && npm install svgo -g \
     && apt-get install -yqq --no-install-recommends \
@@ -33,6 +33,8 @@ RUN /tmp/install-pngquant
 
 COPY install-nginx /tmp/install-nginx
 RUN /tmp/install-nginx
+
+RUN rm -rf /var/lib/apt/lists/*
 
 # Get discourse
 RUN useradd discourse -s /bin/bash -m -U &&\
@@ -83,9 +85,6 @@ COPY service /etc/service
 
 # Configure ImageMagick policy
 COPY policy.xml /usr/local/etc/ImageMagick-6/policy.xml
-
-# Clean up apt
-RUN rm -rf /var/lib/apt/lists/*
 
 # Set runtime env
 ENV RAILS_ENV production
