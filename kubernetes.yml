@@ -115,10 +115,8 @@ spec:
           value: discourse
         - name: POSTGRES_PASSWORD
           value: d15c0ur53
-        - name: POSTGRES_DB
-          value: discourse
         volumeMounts:
-        - mountPath: /var/lib/postgresql/data
+        - mountPath: /var/lib/postgresql
           name: discourse-postgres-data
       restartPolicy: Always
       volumes:
