@@ -23,15 +23,6 @@ spec:
         volumeMounts:
         - mountPath: /shared
           name: discourse-data
-      - image: artsy/discourse:1.8.9
-        name: discourse-sidekiq
-        command: ["bundle", "exec", "sidekiq"]
-        envFrom:
-        - configMapRef:
-            name: discourse-environment
-        volumeMounts:
-        - mountPath: /shared
-          name: discourse-data
       restartPolicy: Always
       volumes:
       - name: discourse-data
