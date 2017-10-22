@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-VERSION=1.10.1
+VERSION=1.12.2
 cd /tmp
 
 apt-get install -y autoconf
@@ -8,6 +8,7 @@ apt-get install -y autoconf
 
 git clone https://github.com/bagder/libbrotli
 cd libbrotli
+git checkout d65ed0dca3116ea4fcb78808852bf3d4f421be53
 ./autogen.sh
 ./configure
 make install
@@ -17,6 +18,10 @@ cd /tmp
 
 # this is the reason we are compiling by hand...
 git clone https://github.com/google/ngx_brotli.git
+cd /tmp/ngx_brotli
+git submodule update --init
+
+cd /tmp
 
 curl -O https://nginx.org/download/nginx-$VERSION.tar.gz
 tar zxf nginx-$VERSION.tar.gz
