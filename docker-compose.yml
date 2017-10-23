@@ -10,17 +10,17 @@ services:
       DISCOURSE_SMTP_PASSWORD: password
       DISCOURSE_DEVELOPER_EMAILS: hostmaster@your.domain
       DISCOURSE_DB_PASSWORD: d15c0ur53
-      DISCOURSE_DB_HOST: postgres
-      DISCOURSE_REDIS_HOST: redis
+      DISCOURSE_DB_HOST: postgres-discourse
+      DISCOURSE_REDIS_HOST: redis-discourse
     build: .
     ports:
       - "8080:80"
     depends_on:
-      - postgres
-      - redis
-  redis:
+      - postgres-discourse
+      - redis-discourse
+  redis-discourse:
     image: redis:3.2
-  postgres:
+  postgres-discourse:
     environment:
       POSTGRES_USER: discourse
       POSTGRES_PASSWORD: d15c0ur53

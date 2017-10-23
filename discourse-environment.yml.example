@@ -8,8 +8,8 @@ data:
   DISCOURSE_SMTP_PASSWORD: password
   DISCOURSE_DEVELOPER_EMAILS: hostmaster@your.domain
   DISCOURSE_DB_PASSWORD: d15c0ur53
-  DISCOURSE_DB_HOST: discourse-postgres
-  DISCOURSE_REDIS_HOST: discourse-redis
+  DISCOURSE_DB_HOST: postgres-discourse
+  DISCOURSE_REDIS_HOST: redis-discourse
 kind: ConfigMap
 metadata:
   labels:
