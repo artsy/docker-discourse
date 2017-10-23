@@ -37,23 +37,18 @@ RUN /tmp/install-nginx
 RUN rm -rf /var/lib/apt/lists/*
 
 # Get discourse
-RUN useradd discourse -s /bin/bash -m -U &&\
-    mkdir -p /var/www && cd /var/www &&\
+RUN mkdir -p /var/www && cd /var/www &&\
     git clone https://github.com/discourse/discourse.git &&\
     cd discourse &&\
     git remote set-branches --add origin tests-passed &&\
-    git checkout v$DISCOURSE_VERSION &&\
-    chown -R discourse:www-data .
+    git checkout v$DISCOURSE_VERSION
 
-# Update bundler
+# Update bundler and rake
 RUN gem install bundler
-RUN chown -R discourse:www-data /usr/local/bundle
+RUN gem install rake -v '11.3.0'
 
-# Bundle install as discourse
-ENV HOME /home/discourse
-ENV USER discourse
+# Bundle install
 RUN cd $HOMEDIR &&\
-    exec chpst -u discourse:www-data -U discourse:www-data \
     bundle install --deployment \
     --without test --without development
 
@@ -69,8 +64,7 @@ RUN cd $HOMEDIR \
 	&& bash -c "touch -a           /shared/log/rails/{production,production_errors,unicorn.stdout,unicorn.stderr}.log" \
 	&& bash -c "ln    -s           /shared/log/rails/{production,production_errors,unicorn.stdout,unicorn.stderr}.log $HOMEDIR/log" \
 	&& bash -c "mkdir -p           /shared/{uploads,backups}" \
-	&& bash -c "ln    -s           /shared/{uploads,backups} $HOMEDIR/public" \
-	&& chown -R discourse:www-data .
+	&& bash -c "ln    -s           /shared/{uploads,backups} $HOMEDIR/public"
 
 # Set up nginx
 COPY nginx.conf /etc/nginx/conf.d/discourse.conf
@@ -96,7 +90,6 @@ ENV UNICORN_WORKERS 3
 ENV UNICORN_SIDEKIQS 1
 
 COPY bootstrap.sh $HOMEDIR/bootstrap.sh
-RUN chown discourse:www-data $HOMEDIR/bootstrap.sh
 
 EXPOSE 80
 CMD ["/usr/bin/runsvdir", "-P", "/etc/service"]
