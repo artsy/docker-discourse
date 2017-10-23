@@ -13,6 +13,10 @@ RUN apt-get install -yqq --no-install-recommends \
     runit \
     lsof \
     vim \
+    dnsutils \
+    net-tools \
+    netcat \
+    htop \
     nodejs mysql-client postgresql-client sqlite3 \
     && npm install uglify-js@2.8.27 -g \
     && npm install svgo -g \
