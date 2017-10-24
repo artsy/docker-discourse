@@ -1,7 +1,5 @@
 # docker-discourse
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=brjllc&url=https://github.com/BradJonesLLC/docker-discourse&title=docker-discourse&language=&tags=github&category=software) 
-
 This Docker container is an effort to provide a more self-contained, immediately-deployable
 image for the [Discourse](http://www.discourse.org/) discussion platform.
 
@@ -13,10 +11,13 @@ build your own image instead of depending on the Docker Hub automated build,
 until the architecture is more settled. I would hope this repository can be
 deprecated in the future in favor of a recognized image from the maintainers.
 
-## Usage
+Build the image with `docker build -t artsy/discourse:latest .`
 
-At the moment, this image assumes you are running a PostgreSQL server at `postgres`,
-and a Redis instance at `redis`.
+A `docker-compose.yml` file is included for local development.  To build and run the stack locally, run `docker-compose up --build` and discourse will be available at `http://localhost:8080`.
+
+A `kubernetes.yml` file is included for deployment to Kubernetes.  Launch the deployment with `kubectl create --save-config -f kubernetes.yml`.
+
+## Usage
 
 You should set the following (hopefully self-explanatory) environment variables for the app container:
 
@@ -27,15 +28,9 @@ You should set the following (hopefully self-explanatory) environment variables 
 * `DISCOURSE_SMTP_PASSWORD`
 * `DISCOURSE_DB_PASSWORD` (the username is pre-set to `postgres`)
 
-A sample `docker-compose.yml` file is included for testing purposes. Database migration
-and regular asset creation are not yet configured; to bootstrap the application
-for the first time, run:
+Database migration and regular asset creation are run at application boot time by `/.bootstrap.sh`.
 
-```
-docker-compose run -u discourse app rake db:migrate assets:precompile
-```
-
-In production, you will want to mount `/shared` in the `app` container for data permanence.
+In production, you will want to mount `/shared` in the `app` container for data permanence.  See `kubernetes.yml` for an example deployment.
 
 ## Known issues and OFI's
 
@@ -43,6 +38,6 @@ In production, you will want to mount `/shared` in the `app` container for data 
 
 ## License and Copyright
 
-&copy; 2016 Brad Jones LLC and Civilized Discourse Construction Kit, Inc.
+&copy; 2016 Brad Jones LLC and Civilized Discourse Construction Kit, Inc. and Artsy, Inc.
 
 GPL License.
