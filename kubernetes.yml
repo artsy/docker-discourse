@@ -48,9 +48,19 @@ kind: Service
 metadata:
   labels:
     app: discourse
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:iam::MYSERVERCERTIFICATE"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-connection-draining-enabled: "true"
   name: discourse
 spec:
   ports:
+  - port: 443
+    targetPort: 80
+    name: https
+    protocol: TCP
   - port: 80
     targetPort: 80
     name: http

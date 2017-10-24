@@ -36,11 +36,13 @@ These env vars are set explicity in `docker-compose.yml`.  `kubernetes.yml` uses
 
 Copy `discourse-environment.yml.example` to `discourse-environment.yml`, edit this file with your specific settings, and run `kubectl create --save-config -f discourse-environment.yml`.  Note that this needs to be created before creating the Kubernetes deployment.  
 
-### Deployment
+### Deployment to Kubernetes
 
-A `kubernetes.yml` file is included for deployment to Kubernetes.  Launch the deployment in your Kubernetes cluster with `kubectl create --save-config -f kubernetes.yml`.
+A `kubernetes.yml` file is included for deployment to Kubernetes.  It assumes you are running on AWS and exposes discourse over an ELB with SSL enabled.  The file `nginx.conf` redirects HTTP -> HTTPS if running on a domain that is not `localhost.  Change `MYSERVERCERTIFICATE` to your hosted server certificate. 
 
-In production, you will want to mount `/shared` in the `app` container for data permanence.  See `kubernetes.yml` for an example deployment.
+`kubernetes.yml` also creates a PersistentVolumeClaim and mounts `/shared` in the `discourse` container for data permanence.
+
+Launch the deployment in your Kubernetes cluster with `kubectl create --save-config -f kubernetes.yml`.
 
 ## Known issues and OFI's
 
