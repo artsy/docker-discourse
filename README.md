@@ -11,13 +11,17 @@ build your own image instead of depending on the Docker Hub automated build,
 until the architecture is more settled. I would hope this repository can be
 deprecated in the future in favor of a recognized image from the maintainers.
 
+## Usage
+
+### Build and Development
+
 Build the image with `docker build -t artsy/discourse:latest .`
 
-A `docker-compose.yml` file is included for local development.  To build and run the stack locally, run `docker-compose up --build` and discourse will be available at `http://localhost:8080`.
+A `docker-compose.yml` file is included for local development and testing.  To build and run the stack locally, run `docker-compose up --build` and discourse will be available at `http://localhost:8080`.
 
-A `kubernetes.yml` file is included for deployment to Kubernetes.  Launch the deployment with `kubectl create --save-config -f kubernetes.yml`.
+Database migration and regular asset creation are run at application boot time by `/.bootstrap.sh`.
 
-## Usage
+### Environment
 
 You should set the following (hopefully self-explanatory) environment variables for the app container:
 
@@ -28,7 +32,13 @@ You should set the following (hopefully self-explanatory) environment variables 
 * `DISCOURSE_SMTP_PASSWORD`
 * `DISCOURSE_DB_PASSWORD` (the username is pre-set to `postgres`)
 
-Database migration and regular asset creation are run at application boot time by `/.bootstrap.sh`.
+These env vars are set explicity in `docker-compose.yml`.  `kubernetes.yml` uses the `envFrom` statement to inject the environment from a `configMap` object named `discourse-environment`.
+
+Copy `discourse-environment.yml.example` to `discourse-environment.yml`, edit this file with your specific settings, and run `kubectl create --save-config -f discourse-environment.yml`.  Note that this needs to be created before creating the Kubernetes deployment.  
+
+### Deployment
+
+A `kubernetes.yml` file is included for deployment to Kubernetes.  Launch the deployment in your Kubernetes cluster with `kubectl create --save-config -f kubernetes.yml`.
 
 In production, you will want to mount `/shared` in the `app` container for data permanence.  See `kubernetes.yml` for an example deployment.
 
