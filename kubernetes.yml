@@ -13,7 +13,7 @@ spec:
         app: discourse
     spec:
       containers:
-      - image: artsy/discourse:1.8.9
+      - image: artsy/discourse:latest
         name: discourse
         envFrom:
         - configMapRef:
