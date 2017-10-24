@@ -38,7 +38,9 @@ Copy `discourse-environment.yml.example` to `discourse-environment.yml`, edit th
 
 ### Deployment to Kubernetes
 
-A `kubernetes.yml` file is included for deployment to Kubernetes.  It assumes you are running on AWS and exposes discourse over an ELB with SSL enabled.  The file `nginx.conf` redirects HTTP -> HTTPS if running on a domain that is not `localhost.  Change `MYSERVERCERTIFICATE` to your hosted server certificate. 
+A `kubernetes.yml` file is included for deployment to Kubernetes.  It assumes you are running on AWS and exposes discourse over an ELB with SSL enabled.
+
+The file `nginx.conf` redirects HTTP -> HTTPS if running on a domain that is not `localhost`.  Change `MYSERVERCERTIFICATE` to your hosted server certificate.
 
 `kubernetes.yml` also creates a PersistentVolumeClaim and mounts `/shared` in the `discourse` container for data permanence.
 
